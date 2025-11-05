@@ -1,12 +1,22 @@
-const express = require('express');
- const cors = require('cors');
- const app = express();
-app.use(cors());
-const PORT = process.env.PORT || 4000;
-app.get('/api', (req, res) => {
- res.json({ message: 'Hello from the backend' });
- });
-app.listen(PORT, () => {
- console.log(`Backend running on port ${PORT}`);
- });
+const express = require("express");
+const cors = require('cors');
+const mongoose = require("mongoose");
+const port = 3001;
+const routes = require("./routes");
 
+main().catch((err) => console.log(err));
+
+async function main() {
+  await mongoose.connect("mongodb://mongo:27017/todos", {
+    useUnifiedTopology: true,
+    useNewUrlParser: true,
+  });
+  const app = express();
+  app.use(cors());
+  app.use(express.json());
+  app.use("/api", routes);
+
+  app.listen(port, () => {
+    console.log(`Server is listening on port: ${port}`);
+  });
+}
