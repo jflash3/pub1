@@ -1,13 +1,7 @@
-FROM node:10-alpine
-
-WORKDIR /usr/src/app
-
-COPY package*.json ./
-
-RUN npm install
-
-COPY . .
-
-EXPOSE 3001
-
-CMD ["node", "server.js"]
+FROM python:3.6 as backend_stage
+ENV PYTHONBUFFERED 1
+RUN mkdir /backend
+WORKDIR /backend
+COPY . ./
+RUN pip install -r requirements.txt
+RUN pip install https://github.com/jasperlittle/django-rest-framework-docs/archive/master.zip
